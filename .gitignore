@@ -11,3 +11,7 @@
 *.lai
 *.la
 *.a
+
+src/Release/
+src/*.vcxproj
+src/*.vcxproj.*
