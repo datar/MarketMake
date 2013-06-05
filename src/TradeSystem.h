@@ -1,5 +1,7 @@
 #pragma once
 
+#include "HsFutures.h"
+
 #include "Quote.h"
 
 extern QuoteSystem Quote;
@@ -17,4 +19,15 @@ struct SingleOrder{
     char* futu_entrust_price;
     char* entrust_amount;
     char* entrust_kind;
+};
+
+class TradeServer{
+public:
+    TradeServer();
+    int startServer();
+    int closeServer();
+    bool hasStart();
+
+private:
+    IHsFutuComm* server;
 };

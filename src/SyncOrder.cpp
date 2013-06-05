@@ -20,41 +20,39 @@ int SendSyncMessage(IHsFutuComm* lpComm, IFuMessage* requestMessage, IFuMessage*
 }
 
 int sendSyncSingleOrder(IHsFutuComm* lpComm,
-                        const char* username,
+                        const char* fundAccount,
                         const char* password,
-                        const char* futu_exch_type,
-                        const char* futures_account,
-                        const char* contract_code,
-                        const char* entrust_bs,
-                        const char* futures_direction,
-                        const char* hedge_type,
-                        const char* futu_entrust_prop,
-                        const double futu_entrust_price,
-                        const int entrust_amount,
-                        const char* entrust_kind){
-	//业务操作委托下单
-	IFuMessage* lpReqMsg = NewFuMessage(MSG_TYPE_NEW_SINGLE_ORDER,MSG_MODE_REQUEST); //委托下单
-	IFuMessage* lpAnsMsg = NewFuMessage();     //接收消息(无关消息类型和模式,SDK会置相关类型)
+                        const char* exchange,
+                        const char* futuresAccount,
+                        const char* contractCode,
+                        const char* buySell,
+                        const char* openClose,
+                        const char* hedgeType,
+                        const char* proper,
+                        const double price,
+                        const int amount,
+                        const char* kind){
 
-	//打包请求参数(字段顺序无关,重复设置字段则覆盖其值)
+	IFuMessage* lpReqMsg = NewFuMessage(MSG_TYPE_NEW_SINGLE_ORDER,MSG_MODE_REQUEST); 
+	IFuMessage* lpAnsMsg = NewFuMessage(); 
+
 	IFuRecord* lpRecord = lpReqMsg->AddRecord();
-	lpRecord->SetString("fund_account",username);
+	lpRecord->SetString("fund_account",fundAccount);
 	lpRecord->SetString("password",password);
 
-	lpRecord->SetString("futu_exch_type",futu_exch_type);
-	lpRecord->SetString("futures_account",futures_account);
-	lpRecord->SetString("contract_code",contract_code);
-	lpRecord->SetString("entrust_bs", entrust_bs);
-	lpRecord->SetString("futures_direction", futures_direction);
-	lpRecord->SetString("hedge_type", hedge_type);
-	lpRecord->SetString("futu_entrust_prop",futu_entrust_prop);
-	//lpRecord->SetString("futu_entrust_price",futu_entrust_price);
-    lpRecord->SetDouble("futu_entrust_price",futu_entrust_price);
-	//lpRecord->SetString("entrust_amount", entrust_amount);
-    lpRecord->SetInt("entrust_amount", entrust_amount);
-	lpRecord->SetString("entrust_kind", entrust_kind);
+	lpRecord->SetString("futu_exch_type",exchange);
+	lpRecord->SetString("futures_account",futuresAccount);
+	lpRecord->SetString("contract_code",contractCode);
+	lpRecord->SetString("entrust_bs", buySell);
+	lpRecord->SetString("futures_direction", openClose);
+	lpRecord->SetString("hedge_type", hedgeType);
+	lpRecord->SetString("futu_entrust_prop",proper);
+    lpRecord->SetDouble("futu_entrust_price",price);
+
+    lpRecord->SetInt("entrust_amount", amount);
+	lpRecord->SetString("entrust_kind", kind);
     //lpRecord->SetString("volume_condition","0");
-	//同步接收消息
+
 	int iRet = SendSyncMessage(lpComm, lpReqMsg,lpAnsMsg);
     int orderNo = lpAnsMsg->GetRecord(0)->GetInt("entrust_no");
     lpReqMsg->Release();
@@ -89,11 +87,9 @@ int getSyncCombinCode(IHsFutuComm* lpComm,
                         const char* fund_account, 
                         const char* futu_exch_type, 
                         const char* request_num){
-    //查询组合代码
-	IFuMessage* lpGetCombinCodeReqMsg = NewFuMessage(MSG_TYPE_GET_COMBIN_CODE,MSG_MODE_REQUEST); //委托下单
-	IFuMessage* lpGetCombinCodeAnsMsg = NewFuMessage();     //接收消息(无关消息类型和模式,SDK会置相关类型)
+	IFuMessage* lpGetCombinCodeReqMsg = NewFuMessage(MSG_TYPE_GET_COMBIN_CODE,MSG_MODE_REQUEST); 
+	IFuMessage* lpGetCombinCodeAnsMsg = NewFuMessage();     
 
-	//打包请求参数(字段顺序无关,重复设置字段则覆盖其值)
 	IFuRecord* lpGetCombinCodeRecord = lpGetCombinCodeReqMsg->AddRecord();
 	lpGetCombinCodeRecord->SetString("fund_account", fund_account);
 	lpGetCombinCodeRecord->SetString("futu_exch_type", futu_exch_type);
